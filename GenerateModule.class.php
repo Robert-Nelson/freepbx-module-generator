@@ -104,10 +104,8 @@ class GenerateModuleCommand extends Command{
 				$this->touchFiles();
 				$this->touchFilesUCP();
 				$this->makeModuleXMLUCP();
-				$this->makeModuleXMLUCP();
-				$this->makeBMO();
+				$this->makeBMOBoth();
 				$this->makePage();
-				$this->makeBMOUCP();
 				$this->makeUCPClass();
 				$this->makeGlobaljsUCP();
 				$this->makelessUCP();
@@ -242,6 +240,7 @@ class GenerateModuleCommand extends Command{
 			'license' => $this->license,
 			'licenselink' => 'http://www.gnu.org/licenses/gpl-3.0.txt',  //TODO: Put the correct license link
 			'changelog' => '*'.$this->version.'* Initial release',
+			'menuitems' => array($this->rawname => ucfirst($this->rawname)),
 			'hooks' => array(
 				'ucp' => array(
 					'constructModuleConfigPages' => 'ucpConfigPage',
@@ -270,10 +269,10 @@ class GenerateModuleCommand extends Command{
 						$submenu->addAttribute('callingMethod',$k2);
 					}
 				}
-			}elseif($key == 'supported'){
+			}elseif($key == 'supported' || $key == 'menuitems'){
 				$menu = $xml->addChild($key);
 				foreach($value as $k => $v)
-				$menu->addChild($k,$v);
+				     $menu->addChild($k,$v);
 			}else{
 				$xml->addChild($key,$value);
 			}
@@ -312,6 +311,20 @@ class GenerateModuleCommand extends Command{
 		}
 		fclose($bmofile);
 	}
+
+	protected function makeBMOBoth(){
+                $this->output->writeln("Generating BMO class");
+                $uppername = ucfirst($this->rawname);
+                $template = file(__DIR__.'/resources/BMOBoth.template');
+                $bmofile =  fopen($this->basedir .'/'.$uppername.'.class.php',"w");
+                $find = array('##RAWNAME##','##CLASSNAME##');
+                $replace = array($this->rawname, $uppername);
+                foreach ($template as $line) {
+                        $out = str_replace($find, $replace, $line);
+                        fwrite($bmofile, $out);
+                }
+                fclose($bmofile);
+        }
 
 	protected function makeUCPClass(){
 		$this->output->writeln("Generating UCP Module class");
