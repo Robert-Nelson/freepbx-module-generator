@@ -56,7 +56,7 @@ class ##CLASSNAME## implements \BMO {
 	}
 	public function showPage(){
 		$vars = array('helloworld' => _("Hello World"));
-		return load_view(__DIR__.'/main.php',$vars);
+		return load_view(__DIR__.'/views/main.php',$vars);
 	}
 	public function ajaxRequest($req, &$setting) {
 		switch ($req) {
