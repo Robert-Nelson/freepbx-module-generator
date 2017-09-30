@@ -8,7 +8,7 @@ include __DIR__.'/GenerateModule.class.php';
 use Symfony\Component\Console\Application;
 
 $application = new Application();
-
-$application->add(new GenerateModuleCommand());
-
+$command = new GenerateModuleCommand();
+$application->add($command);
+$application->setDefaultCommand($command->getName());
 $application->run();
