@@ -1,0 +1,7 @@
+{
+    "files": ["GenerateModule.class.php","vendor/autoload.php"],
+		"directories": ["resources","vendor"],
+    "main": "freepbxgenmod",
+    "output": "freepbxgenerator.phar",
+    "stub": true
+}
