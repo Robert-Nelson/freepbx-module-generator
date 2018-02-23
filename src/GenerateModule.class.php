@@ -143,7 +143,7 @@ class GenerateModuleCommand extends Command{
 			$config['devmode'] = true;
 		} else {
 			$question = new Question('What is the location of the FreePBX module directory?', '/var/www/html/admin/modules');
-			$this->getHelper('question');
+			$helper = $this->getHelper('question');
 			$config['repo_directory']  = $helper->ask($input, $output, $question);
 			$config['devmode'] = false;
 		}
