@@ -133,7 +133,7 @@ class GenerateModuleCommand extends Command{
 		}
 	}
 
-	public static function getFreePBXConfig($input, $output) {
+	public function getFreePBXConfig($input, $output) {
 		$homedir = getenv("HOME");
 		$freepbxconfig = $homedir . '/' . '.freepbxconfig';
 		$config = array();
