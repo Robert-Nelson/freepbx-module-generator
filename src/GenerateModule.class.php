@@ -140,16 +140,17 @@ class GenerateModuleCommand extends Command{
 
 		if (file_exists($freepbxconfig)) {
 			$config = parse_ini_file($freepbxconfig);
-			$config['devmode'] = true;
+			$devmode = true;
 		} else {
 			$question = new Question('What is the location of the FreePBX module directory?', '/var/www/html/admin/modules');
 			$helper = $this->getHelper('question');
 			$config['repo_directory']  = $helper->ask($input, $output, $question);
-			$config['devmode'] = false;
+			$devmode = false;
 		}
 
 		return array(
-			"module_directory" => $config['repo_directory']
+			"module_directory" => $config['repo_directory'],
+			"devmode" => $devmode
 		);
 	}
 
