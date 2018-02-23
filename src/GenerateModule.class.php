@@ -35,13 +35,13 @@ class GenerateModuleCommand extends Command{
 		$this->rawname  = $helper->ask($input, $output, $question);
 
 		$config = $this->getFreePBXConfig($input, $output);
-		if(!empty($config['repo_directory'])) {
-			if(!file_exists($config['repo_directory'])) {
-				$output->writeln("<error>The repository directory (".$config['repo_directory'].") does not exist</error>");
+		if(!empty($config['module_directory'])) {
+			if(!file_exists($config['module_directory'])) {
+				$output->writeln("<error>The repository directory (".$config['module_directory'].") does not exist</error>");
 				exit(1);
 			}
 		}
-		$this->basedir = !empty($config['repo_directory']) ? $config['repo_directory'].'/'.$this->rawname : getcwd().'/'.$this->rawname;
+		$this->basedir = !empty($config['module_directory']) ? $config['module_directory'].'/'.$this->rawname : getcwd().'/'.$this->rawname;
 		if(is_dir($this->basedir)){
 			$output->writeln("<error>This name ({$this->rawname}) is already in use [".$this->basedir."]</error>");
 			exit(1);
@@ -140,18 +140,17 @@ class GenerateModuleCommand extends Command{
 
 		if (file_exists($freepbxconfig)) {
 			$config = parse_ini_file($freepbxconfig);
+			$directory = $config['repo_directory'];
 			$devmode = true;
 		} else {
 			$question = new Question('What is the location of the FreePBX module directory? [/var/www/html/admin/modules]', '/var/www/html/admin/modules');
 			$helper = $this->getHelper('question');
-			$config['repo_directory']  = $helper->ask($input, $output, $question);
+			$directory  = $helper->ask($input, $output, $question);
 			$devmode = false;
 		}
 
-		print_r($config);
-
 		return array(
-			"module_directory" => $config['repo_directory'],
+			"module_directory" => $directory,
 			"devmode" => $devmode
 		);
 	}
