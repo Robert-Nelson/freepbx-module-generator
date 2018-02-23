@@ -1,7 +1,7 @@
 <?php
 namespace FreePBX\modules;
 
-class ##CLASSNAME## implements \BMO {
+class ##CLASSNAME## extends \FreePBX_Helpers implements \BMO {
 	public function __construct($freepbx = null) {
 		if ($freepbx == null) {
 			throw new Exception("Not given a FreePBX Object");
@@ -9,10 +9,37 @@ class ##CLASSNAME## implements \BMO {
 		$this->FreePBX = $freepbx;
 		$this->db = $freepbx->Database;
 	}
-	public function install(){}
+	public function install(){
+		$this->setConfig('foo','bar');
+		$this->getConfig('foo'); //returns 'bar'
+	}
 	public function uninstall(){}
 	public function backup() {}
 	public function restore($backup) {}
+
+	/**
+	 * Set Priority for Dialplan Hooking
+	 * Core sits at a priority of 600
+	 * @method myDialplanHooks
+	 * @return string        Priority
+	 */
+	public static function myDialplanHooks() {
+		return 900;
+	}
+
+	/**
+	 * Hook into Dialplan (extensions_additional.conf)
+	 * @method doDialplanHook
+	 * @param  class       $ext      The Extensions Class https://wiki.freepbx.org/pages/viewpage.action?pageId=98701336
+	 * @param  string       $engine   Always Asterisk, Legacy
+	 * @param  string       $priority Priority
+	 */
+	public function doDialplanHook(&$ext, $engine, $priority) {
+		//$ext->addInclude('from-internal-additional', '##RAWNAME##-context'); // Add the context to from from-internal
+		$mcontext = '##RAWNAME##-context';
+		$ext->add($mcontext, '_X!','', new \ext_noop('Hello from ##RAWNAME##'));
+	}
+
 	public function doConfigPageInit($page) {}
 	public function ucpConfigPage($mode, $user, $action) {
 		if(empty($user)) {
@@ -63,70 +90,70 @@ class ##CLASSNAME## implements \BMO {
 	}
 	public function ucpDelGroup($id,$display,$data) {}
 	public function getActionBar($request) {
-                $buttons = array();
-                switch($_GET['display']) {
-                        case '##RAWNAME##':
-                                $buttons = array(
-                                        'delete' => array(
-                                                'name' => 'delete',
-                                                'id' => 'delete',
-                                                'value' => _('Delete')
-                                        ),
-                                        'reset' => array(
-                                                'name' => 'reset',
-                                                'id' => 'reset',
-                                                'value' => _('Reset')
-                                        ),
-                                        'submit' => array(
-                                                'name' => 'submit',
-                                                'id' => 'submit',
-                                                'value' => _('Submit')
-                                        )
-                                );
-                                if (empty($_GET['extdisplay'])) {
-                                        unset($buttons['delete']);
-                                }
-                        break;
-                }
-                return $buttons;
-        }
+		$buttons = array();
+		switch($_GET['display']) {
+			case '##RAWNAME##':
+			$buttons = array(
+			'delete' => array(
+			'name' => 'delete',
+			'id' => 'delete',
+			'value' => _('Delete')
+			),
+			'reset' => array(
+			'name' => 'reset',
+			'id' => 'reset',
+			'value' => _('Reset')
+			),
+			'submit' => array(
+			'name' => 'submit',
+			'id' => 'submit',
+			'value' => _('Submit')
+			)
+			);
+			if (empty($_GET['extdisplay'])) {
+				unset($buttons['delete']);
+			}
+			break;
+		}
+		return $buttons;
+	}
 	public function showPage(){
-                $vars = array('helloworld' => _("Hello World"));
-                return load_view(__DIR__.'/views/main.php',$vars);
-        }
-        public function ajaxRequest($req, &$setting) {
-                switch ($req) {
-                        case 'getJSON':
-                                return true;
-                        break;
-                        default:
-                                return false;
-                        break;
-                }
-        }
-        public function ajaxHandler(){
-                switch ($_REQUEST['command']) {
-                        case 'getJSON':
-                                switch ($_REQUEST['jdata']) {
-                                        case 'grid':
-                                                $ret = array();
-                                                /*code here to generate array*/
-                                                return $ret;
-                                        break;
+		$vars = array('helloworld' => _("Hello World"));
+		return load_view(__DIR__.'/views/main.php',$vars);
+	}
+	public function ajaxRequest($req, &$setting) {
+		switch ($req) {
+			case 'getJSON':
+			return true;
+			break;
+			default:
+			return false;
+			break;
+		}
+	}
+	public function ajaxHandler(){
+		switch ($_REQUEST['command']) {
+			case 'getJSON':
+			switch ($_REQUEST['jdata']) {
+				case 'grid':
+				$ret = array();
+				/*code here to generate array*/
+				return $ret;
+				break;
 
-                                        default:
-                                                return false;
-                                        break;
-                                }
-                        break;
+				default:
+				return false;
+				break;
+			}
+			break;
 
-                        default:
-                                return false;
-                        break;
-                }
-        }
+			default:
+			return false;
+			break;
+		}
+	}
 	public function getRightNav($request) {
-                $html = 'your custom html';
-                return $html;
-        }
+		$html = 'your custom html';
+		return $html;
+	}
 }
