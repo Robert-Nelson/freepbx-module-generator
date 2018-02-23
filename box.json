@@ -1,7 +1,7 @@
 {
-    "files": ["GenerateModule.class.php","vendor/autoload.php"],
-		"directories": ["resources","vendor"],
-    "main": "freepbxgenmod",
-    "output": "freepbxgenerator.phar",
+    "files": ["src/GenerateModule.class.php","src/vendor/autoload.php"],
+		"directories": ["src/resources","src/vendor"],
+    "main": "src/freepbxgenmod",
+    "output": "dist/freepbxgenerator.phar",
     "stub": true
 }
