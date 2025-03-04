@@ -28,7 +28,7 @@ class GenerateModuleCommand extends Command{
 		);
 		$this->moduleType = $helper->ask($input,$output,$question);
 
-		$question = new Question('What is your module\'s name (no spaces)? [helloworld] ', 'helloworld');
+		$question = new Question('What is your module\'s name (no spaces or hyphens)? [helloworld] ', 'helloworld');
 		$question->setNormalizer(function ($value) {
 			return strtolower(trim($value));
 		});

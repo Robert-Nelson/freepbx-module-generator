@@ -2,6 +2,8 @@
 namespace FreePBX\modules;
 
 class ##CLASSNAME## extends \FreePBX_Helpers implements \BMO {
+	private $FreePBX;
+	private $db;
 	public function __construct($freepbx = null) {
 		if ($freepbx == null) {
 			throw new Exception("Not given a FreePBX Object");
